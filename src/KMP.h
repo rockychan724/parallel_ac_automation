@@ -5,11 +5,13 @@
 
 class KMP {
 public:
-    explicit KMP(const std::string &pattern);
+    explicit KMP(const std::string &, bool=true);
 
     ~KMP();
 
-    int Search(const std::string &s);
+    void ResetPattern(const std::string &, bool=true);
+
+    int Search(const std::string &);
 
 private:
     std::string pattern;

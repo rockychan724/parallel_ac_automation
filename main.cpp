@@ -6,6 +6,9 @@ void TestKMP() {
     std::string s = "BBC ABCDAB ABCDABCDABDE", pattern = "ABCDABD";
     KMP kmp(pattern);
     std::cout << kmp.Search(s) << std::endl;
+    s = "abacababc", pattern = "abab";
+    kmp.ResetPattern(pattern);
+    std::cout << kmp.Search(s) << std::endl;
 }
 
 int main() {
