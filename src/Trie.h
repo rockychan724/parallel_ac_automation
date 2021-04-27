@@ -3,10 +3,11 @@
 
 #include <map>
 
-template<typename T>
+//template<typename T>
+#define T char
 class Trie {
 public:
-    Trie();
+    Trie(T, bool);
 
     ~Trie();
 
@@ -19,11 +20,6 @@ private:
         T element;
         bool end_flag;
         std::map<T, Node *> next;
-
-        Node() {
-            element = nullptr;
-            end_flag = false;
-        }
 
         Node(T e, bool _end_flag) {
             element = e;

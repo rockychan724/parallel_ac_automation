@@ -40,7 +40,6 @@ int KMP::Search(const std::string &s) {
     else return -1;
 }
 
-// @see: https://blog.csdn.net/v_july_v/article/details/7041827
 void KMP::GetNext() {
     this->next[0] = -1;
     int len = this->pattern.length();
