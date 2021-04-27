@@ -30,7 +30,9 @@ bool Trie::Search(T *s, int s_length) {
     for (int i = 0; i < s_length; i++) {
         if (temp->end_flag)
             return true;
-        if (temp->next.find(s[i]) != temp->next.end())
+        if (temp->next.find(s[i]) == temp->next.end())
+            temp = this->root;
+        else
             temp = temp->next[s[i]];
     }
     return false;

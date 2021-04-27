@@ -15,7 +15,7 @@ void TestKMP() {
 
 void TestTrie() {
     std::vector<std::string> words = {"in", "inn", "int", "tea", "ten", "to"};
-    std::vector<std::string> strings = {"you are a good man", "too young", "te", "insert"};
+    std::vector<std::string> strings = {"you are a good man", "too young", "happy birthday to you", "te", "insert"};
     Trie tree('\0', false);
     for (const auto &word: words) {
         tree.Insert(const_cast<char *>(word.c_str()), word.length());
