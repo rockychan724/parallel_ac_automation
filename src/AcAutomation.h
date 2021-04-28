@@ -32,7 +32,8 @@ private:
         }
      };
     std::shared_ptr<Node> root;
-    bool case_sensitive_flag{};
+    bool case_sensitive_flag;
+    bool update_fail_pointer;
 };
 
 

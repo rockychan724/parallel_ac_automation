@@ -1,10 +1,12 @@
 #include "AcAutomation.h"
 #include <algorithm>
 #include <queue>
+#include <iostream>
 
 AcAutomation::AcAutomation(bool is_case_sensitive) {
     this->root = std::make_shared<Node>();
     this->case_sensitive_flag = is_case_sensitive;
+    this->update_fail_pointer = true;
 }
 
 // insert a word into ac tree
@@ -22,10 +24,17 @@ void AcAutomation::Insert(std::string word) {
         temp = temp->next[w];
     }
     temp->end_flag = true; // last char's flag of a word should be set true
+    this->update_fail_pointer = true; // When inserting a word, the fail pointer should be updated.
 }
 
 // use BFS algorithm to build all fail pointers in this tree
 void AcAutomation::BuildFailPointer() {
+    if (!this->update_fail_pointer) {
+        std::cout << "You have updated fail pointer. Don't update again" << std::endl;
+        return;
+    }
+    this->update_fail_pointer = false;
+
     std::queue<std::shared_ptr<Node>> q;
     q.push(this->root); // 根节点失配指针为 nullptr
     while (!q.empty()) {
@@ -54,6 +63,10 @@ void AcAutomation::BuildFailPointer() {
 }
 
 std::vector<std::string> AcAutomation::Search(std::string text) {
+    if (this->update_fail_pointer) {
+        std::cout << "Attention!!! Please update fail pointer by call AcAutomation::BuildFailPointer()" << std::endl;
+        return std::vector<std::string>();
+    }
     if (!case_sensitive_flag)
         std::transform(text.begin(), text.end(), text.begin(), ::tolower);
     std::vector<std::string> matched_words;
