@@ -3,4 +3,7 @@ project(parallel_ac_automation)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(parallel_ac_automation main.cpp src/KMP.cpp src/KMP.h src/Trie.cpp src/Trie.h src/AcAutomation.cpp src/AcAutomation.h)
+#aux_source_directory(${PROJECT_SOURCE_DIR}/src src_list)
+#add_executable(parallel_ac_automation main.cpp ${scr_list})
+
+add_executable(parallel_ac_automation main.cpp src/KMP.cpp src/KMP.h src/Trie.cpp src/Trie.h src/AcAutomation.cpp src/AcAutomation.h src/ParallelAcAutomation.cpp src/ParallelAcAutomation.h)

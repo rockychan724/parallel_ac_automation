@@ -14,7 +14,7 @@ void AcAutomation::Insert(std::string word) {
     if (!this->case_sensitive_flag)
         std::transform(word.begin(), word.end(), word.begin(), ::tolower);
     std::shared_ptr<Node> temp = this->root;
-    for (char & w : word) {
+    for (char &w : word) {
         if (temp->next.find(w) == temp->next.end()) {
             std::shared_ptr<Node> new_node;
             new_node = std::make_shared<Node>();
@@ -43,7 +43,9 @@ void AcAutomation::BuildFailPointer() {
         for (const auto &iter: current_node->next) { // 遍历当前节点的所有子节点
             char w = iter.first;
             std::shared_ptr<Node> son_node = iter.second;
-            q.push(son_node); // 将当前节点的各个子节点加入队列
+//            // AcAutomation::BuildFailPointer() 被多次调用时，在更新 fail 指针之前需要将 fail 指针归零
+//            // 暂时发现这个操作是多余的，可以注释
+//            son_node->fail = nullptr;
             if (current_node == this->root) {
                 son_node->fail = this->root;
             } else {
@@ -58,6 +60,7 @@ void AcAutomation::BuildFailPointer() {
                 if (!p)
                     son_node->fail = this->root;
             }
+            q.push(son_node); // 将当前节点的各个子节点加入队列
         }
     }
 }
