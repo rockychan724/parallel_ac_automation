@@ -24,8 +24,8 @@ private:
         std::shared_ptr<Node> fail; // 失配指针
         std::string path; // 记录从根节点到当前节点的路径构成的字符序列，以便匹配到单词后直接输出单词
 
-        explicit Node(bool _end_flag) {
-            end_flag = _end_flag;
+        explicit Node() {
+            end_flag = false;
             next.clear();
             fail = nullptr;
             path = "";

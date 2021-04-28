@@ -3,7 +3,7 @@
 #include <queue>
 
 AcAutomation::AcAutomation(bool is_case_sensitive) {
-    this->root = std::make_shared<Node>(false);
+    this->root = std::make_shared<Node>();
     this->case_sensitive_flag = is_case_sensitive;
 }
 
@@ -12,18 +12,16 @@ void AcAutomation::Insert(std::string word) {
     if (!this->case_sensitive_flag)
         std::transform(word.begin(), word.end(), word.begin(), ::tolower);
     std::shared_ptr<Node> temp = this->root;
-    for (int i = 0; i < word.length(); i++) {
-        if (temp->next.find(word[i]) == temp->next.end()) {
+    for (char & w : word) {
+        if (temp->next.find(w) == temp->next.end()) {
             std::shared_ptr<Node> new_node;
-            if (i == word.length() - 1)
-                new_node = std::make_shared<Node>(true);
-            else
-                new_node = std::make_shared<Node>(false);
-            new_node->path = temp->path + word[i];
-            temp->next.insert({word[i], new_node});
+            new_node = std::make_shared<Node>();
+            new_node->path = temp->path + w;
+            temp->next.insert({w, new_node});
         }
-        temp = temp->next[word[i]];
+        temp = temp->next[w];
     }
+    temp->end_flag = true; // last char's flag of a word should be set true
 }
 
 // use BFS algorithm to build all fail pointers in this tree
@@ -60,7 +58,7 @@ std::vector<std::string> AcAutomation::Search(std::string text) {
         std::transform(text.begin(), text.end(), text.begin(), ::tolower);
     std::vector<std::string> matched_words;
     std::shared_ptr<Node> p = this->root;
-    for (const auto &w: text) {
+    for (char &w: text) {
         // p==nullptr 说明当前指针p为root节点的失配指针，因为只有root节点的是失配指针为nullptr
         while (p && p->next.find(w) == p->next.end())
             p = p->fail;
@@ -68,18 +66,14 @@ std::vector<std::string> AcAutomation::Search(std::string text) {
             p = this->root;
         else
             p = p->next[w];
-        if (p->end_flag)
-            matched_words.push_back(p->path);
 
         // 找到当前所有匹配的单词
-//        std::shared_ptr<Node> temp = p;
-//        while (temp) {
-//            if (temp->end_flag)
-//                matched_words.push_back(temp->path);
-//            else
-//                break;
-//            temp = temp->fail;
-//        }
+        std::shared_ptr<Node> temp = p;
+        while (temp != this->root) {
+            if (temp->end_flag)
+                matched_words.push_back(temp->path);
+            temp = temp->fail;
+        }
     }
     return matched_words;
 }
