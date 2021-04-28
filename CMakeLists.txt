@@ -3,4 +3,4 @@ project(parallel_ac_automation)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(parallel_ac_automation main.cpp src/KMP.cpp src/Trie.cpp)
+add_executable(parallel_ac_automation main.cpp src/KMP.cpp src/Trie.cpp src/AcAutomation.cpp)

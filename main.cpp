@@ -1,8 +1,10 @@
 #include "src/KMP.h"
 #include "src/Trie.h"
+#include "src/AcAutomation.h"
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 void TestKMP() {
     std::string s = "BBC ABCDAB ABCDABCDABDE", pattern = "ABCDABD";
@@ -25,8 +27,24 @@ void TestTrie() {
     }
 }
 
+void TestAcAutomation() {
+    std::vector<std::string> words = {"she", "shr", "say", "he", "her", "好的", "哈哈", "小心", "good", "千万别翻车了"};
+    std::vector<std::string> strings = {"one day she say her has eaten many shrimps",
+                                        "Very Good! 哈哈，好的，小心点，千万别再翻车了。"};
+    AcAutomation ac_tree;
+    for (const auto &word: words) {
+        ac_tree.Insert(word);
+    }
+    for (const auto &s: strings) {
+        std::vector<std::string> res = ac_tree.Search(s);
+        std::cout << s << std::endl;
+        std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << a << std::endl; });
+    }
+}
+
 int main() {
 //    TestKMP();
-    TestTrie();
+//    TestTrie();
+    TestAcAutomation();
     return 0;
 }
