@@ -1,6 +1,8 @@
 #include "src/KMP.h"
 #include "src/Trie.h"
 #include "src/AcAutomation.h"
+#include "src/ParallelAcAutomation.h"
+#include "data/GetTestData.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -56,9 +58,19 @@ void TestAcAutomation() {
     }
 }
 
+void TestParallelAcAutomation() {
+    std::vector<std::string> words = GetModeString();
+    std::string text = GetText(false);
+    int p = 5; // segments of text
+    ParallelAcAutomation pac(words, p);
+    std::vector<std::string> res = pac.Search(text);
+    std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << a << std::endl; });
+}
+
 int main() {
 //    TestKMP();
 //    TestTrie();
-    TestAcAutomation();
+//    TestAcAutomation();
+    TestParallelAcAutomation();
     return 0;
 }
