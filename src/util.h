@@ -8,8 +8,8 @@
 #include <algorithm>
 #include <fstream>
 
-std::vector<std::string> GetModeString() {
-    std::ifstream ifs("../data/words.txt");
+std::vector<std::string> GetModeString(const std::string& file) {
+    std::ifstream ifs(file.c_str());
     if (!ifs.is_open()) {
         std::cout << "Can't open file!!!" << std::endl;
         return std::vector<std::string>();
@@ -23,8 +23,8 @@ std::vector<std::string> GetModeString() {
     }
 }
 
-std::string GetText(bool ignore_spaces = true) {
-    std::ifstream ifs("../data/wiki_en_1.txt");
+std::string GetText(const std::string& file, bool ignore_spaces = true) {
+    std::ifstream ifs(file.c_str());
     if (!ifs.is_open()) {
         std::cout << "Can't open file!!!" << std::endl;
         return "";
@@ -39,9 +39,9 @@ std::string GetText(bool ignore_spaces = true) {
     }
 }
 
-std::map<std::string, int> GetEntryFrequency(const std::string& text, const std::vector<std::string>& words) {
+std::map<std::string, int> GetEntryFrequency(const std::string &text, const std::vector<std::string> &words) {
     std::map<std::string, int> res;
-    for (auto & word : words) {
+    for (auto &word : words) {
         res.insert({word, 0});
         size_t pos = text.find(word);
         while (pos != std::string::npos) {
@@ -52,9 +52,9 @@ std::map<std::string, int> GetEntryFrequency(const std::string& text, const std:
     return res;
 }
 
-std::map<std::string, int> GetEntryFrequency(const std::vector<std::string>& texts, const std::vector<std::string>& words) {
+std::map<std::string, int> GetEntryFrequency(const std::vector<std::string> &texts, const std::vector<std::string> &words) {
     std::map<std::string, int> res;
-    for (auto & word : words) {
+    for (auto &word : words) {
         int count = std::count(texts.begin(), texts.end(), word);
         res.insert({word, count});
     }
@@ -62,12 +62,20 @@ std::map<std::string, int> GetEntryFrequency(const std::vector<std::string>& tex
 }
 
 bool JudgeCorrectness(const std::map<std::string, int> &gt, const std::map<std::string, int> &pred) {
-    std::cout << "****************** gt\n";
-    std::for_each(gt.begin(), gt.end(),
-                  [](const std::pair<std::string, int> &e) { std::cout << e.first << ": " << e.second << std::endl; });
-    std::cout << "****************** pred\n";
-    std::for_each(pred.begin(), pred.end(),
-                  [](const std::pair<std::string, int> &e) { std::cout << e.first << ": " << e.second << std::endl; });
+//    std::cout << "****************** gt\n";
+//    std::for_each(gt.begin(), gt.end(),
+//                  [](const std::pair<std::string, int> &e) { std::cout << "\"" << e.first << "\": " << e.second << std::endl; });
+//    std::cout << "****************** pred\n";
+//    std::for_each(pred.begin(), pred.end(),
+//                  [](const std::pair<std::string, int> &e) { std::cout << "\"" << e.first << "\": " << e.second << std::endl; });
+    std::cout << "keyword correct_frequency actual_frequency\n";
+    for (const auto &kv: gt) {
+        std::cout << "\"" << kv.first << "\": " << kv.second;
+        auto it = pred.find(kv.first);
+        if (it != pred.end())
+            std::cout << " " << it->second;
+        std::cout << std::endl;
+    }
     return gt == pred;
 }
 

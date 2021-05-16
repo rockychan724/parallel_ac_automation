@@ -11,7 +11,7 @@
 
 class ParallelAcAutomation {
 public:
-    ParallelAcAutomation(const std::vector<std::string> &, int);
+    ParallelAcAutomation(const std::vector<std::string> &, unsigned int);
 
     std::vector<std::string> Search(const std::string &);
 

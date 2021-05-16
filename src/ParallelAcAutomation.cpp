@@ -4,7 +4,7 @@
 
 std::mutex mut;
 
-ParallelAcAutomation::ParallelAcAutomation(const std::vector<std::string> &keywords, int p) : p(p), que(p + 1) {
+ParallelAcAutomation::ParallelAcAutomation(const std::vector<std::string> &keywords, unsigned int p) : p(p), que(p + 1) {
     this->BuildAcAutomation(keywords);
     auto longest_word = std::max_element(keywords.begin(), keywords.end(),
                                          [](const std::string &s1, const std::string &s2) { return s1.length() < s2.length(); });
@@ -64,18 +64,15 @@ void ParallelAcAutomation::SplitText(const std::string &text, std::vector<std::s
 }
 
 void ParallelAcAutomation::Run(int thread_id) {
-    while (true) {
-        if (!this->que[thread_id].empty()) {
-            std::string sub_text = this->que[thread_id].front();
-            this->que[thread_id].pop();
-            std::vector<std::string> sub_result = this->ac_tree->Search(sub_text);
-            std::vector<std::string> dst;
-            std::merge(this->result.begin(), this->result.end(), sub_result.begin(), sub_result.end(),
-                       std::back_inserter(dst)); // merge sub_result to this->result;
-            mut.lock();
-            this->result = dst;
-            mut.unlock();
-            break;
-        }
+    if (!this->que[thread_id].empty()) {
+        std::string sub_text = this->que[thread_id].front();
+        this->que[thread_id].pop();
+        std::vector<std::string> sub_result = this->ac_tree->Search(sub_text);
+        mut.lock();
+        // merge sub_result to this->result;
+        std::vector<std::string> dst;
+        std::merge(this->result.begin(), this->result.end(), sub_result.begin(), sub_result.end(), std::back_inserter(dst));
+        this->result = dst;
+        mut.unlock();
     }
 }

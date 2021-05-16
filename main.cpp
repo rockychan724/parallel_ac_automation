@@ -62,10 +62,10 @@ void TestAcAutomation() {
 
 void TestAcAutomationV2() {
     std::cout << "\n\n======================= 普通 AC自动机 =======================\n";
-    std::vector<std::string> words = GetModeString();
-    std::string text = GetText(false);
+    std::vector<std::string> words = GetModeString("../data/words.txt");
+    std::string text = GetText("../data/wiki_en_1.txt", false);
     std::cout << "keywords: ";
-    std::for_each(words.begin(), words.end(), [](const std::string &a) { std::cout << a << ","; });
+    std::for_each(words.begin(), words.end(), [](const std::string &a) { std::cout << "\"" << a << "\","; });
     std::cout << "\ncharacter num of text: " << text.length() << std::endl;
 
     AcAutomation ac_tree;
@@ -81,9 +81,9 @@ void TestAcAutomationV2() {
     std::vector<std::string> res = ac_tree.Search(text);
     ftime(&end);
     long cost = (end.time * 1000 + end.millitm) - (start.time * 1000 + start.millitm);
-    std::cout << "cost time " << cost << " ms\n";
-    std::cout << "match result: ";
-    std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << a << ","; });
+    std::cout << "Run time " << cost << " ms\n";
+    std::cout << "Match result: ";
+    std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << "\"" << a << "\","; });
     std::cout << std::endl;
 
     std::map<std::string, int> gt = GetEntryFrequency(text, words);
@@ -95,23 +95,23 @@ void TestAcAutomationV2() {
 
 void TestParallelAcAutomation() {
     std::cout << "\n\n======================= 并行 AC自动机 =======================\n";
-    std::vector<std::string> words = GetModeString();
-    std::string text = GetText(false);
+    std::vector<std::string> words = GetModeString("../data/words.txt");
+    std::string text = GetText("../data/wiki_en_1.txt", false);
     std::cout << "keywords: ";
-    std::for_each(words.begin(), words.end(), [](const std::string &a) { std::cout << a << ","; });
+    std::for_each(words.begin(), words.end(), [](const std::string &a) { std::cout << "\"" << a << "\","; });
     std::cout << "\ncharacter num of text: " << text.length() << std::endl;
 
-    int p = 5; // segments of text
+    unsigned int p = 7; // segments of text
     ParallelAcAutomation pac(words, p);
 
-    timeb start, end;
+    struct timeb start{}, end{};
     ftime(&start);
     std::vector<std::string> res = pac.Search(text);
     ftime(&end);
-    int cost = (end.time * 1000 + end.millitm) - (start.time * 1000 + end.millitm);
-    std::cout << "cost time " << cost << " ms\n";
-    std::cout << "match result: ";
-    std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << a << ","; });
+    long cost = (end.time * 1000 + end.millitm) - (start.time * 1000 + start.millitm);
+    std::cout << "Run time " << cost << " ms\n";
+    std::cout << "Match result: ";
+    std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << "\"" << a << "\","; });
     std::cout << std::endl;
 
     std::map<std::string, int> gt = GetEntryFrequency(text, words);
