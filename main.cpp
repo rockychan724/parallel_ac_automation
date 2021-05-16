@@ -3,20 +3,25 @@
 #include "src/AcAutomation.h"
 #include "src/ParallelAcAutomation.h"
 #include "src/util.h"
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include "sys/timeb.h"
+#include "sys/time.h"
 
 void TestKMP() {
-    std::string s = "BBC ABCDAB ABCDABCDABDE", pattern = "ABCDABD";
-    KMP kmp(pattern);
-    std::cout << kmp.Search(s) << std::endl;
-    s = "abacababc", pattern = "abab";
-    kmp.ResetPattern(pattern);
-    std::cout << kmp.Search(s) << std::endl;
+    std::string text = "BBC ABCDAB ABCDABCDABDE";
+    std::vector<std::string> keywords = {"ABCDABD", "abab"};
+    KMP<std::string> kmp;
+    std::map<std::string, std::string> config = {{"use_optimize", "1"}};
+    if (kmp.Init(config, keywords) == 0) {
+        std::cout << "Init error!!!\n";
+        return;
+    }
+    std::map<std::string, std::vector<int>> res = kmp.Search(text);
+    std::cout << "text: \"" << text << "\"\n";
+    std::cout << "match result: \n";
+    for (const auto &kv: res) {
+        std::cout << "\"" << kv.first << "\": ";
+        std::for_each(kv.second.begin(), kv.second.end(), [](int pos) { std::cout << pos << " "; });
+        std::cout << std::endl;
+    }
 }
 
 void TestTrie() {
@@ -76,11 +81,11 @@ void TestAcAutomationV2() {
     // Build fail pointers
     ac_tree.BuildFailPointer();
 
-    struct timeb start{}, end{};
-    ftime(&start);
+    struct timeval start{}, end{};
+    gettimeofday(&start, nullptr);
     std::vector<std::string> res = ac_tree.Search(text);
-    ftime(&end);
-    long cost = (end.time * 1000 + end.millitm) - (start.time * 1000 + start.millitm);
+    gettimeofday(&start, nullptr);
+    double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
     std::cout << "Run time " << cost << " ms\n";
     std::cout << "Match result: ";
     std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << "\"" << a << "\","; });
@@ -104,11 +109,11 @@ void TestParallelAcAutomation() {
     unsigned int p = 7; // segments of text
     ParallelAcAutomation pac(words, p);
 
-    struct timeb start{}, end{};
-    ftime(&start);
+    struct timeval start{}, end{};
+    gettimeofday(&start, nullptr);
     std::vector<std::string> res = pac.Search(text);
-    ftime(&end);
-    long cost = (end.time * 1000 + end.millitm) - (start.time * 1000 + start.millitm);
+    gettimeofday(&start, nullptr);
+    double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
     std::cout << "Run time " << cost << " ms\n";
     std::cout << "Match result: ";
     std::for_each(res.begin(), res.end(), [](const std::string &a) { std::cout << "\"" << a << "\","; });
@@ -122,10 +127,10 @@ void TestParallelAcAutomation() {
 }
 
 int main() {
-//    TestKMP();
+    TestKMP();
 //    TestTrie();
 //    TestAcAutomation();
 //    TestAcAutomationV2();
-    TestParallelAcAutomation();
+//    TestParallelAcAutomation();
     return 0;
 }

@@ -62,20 +62,14 @@ std::map<std::string, int> GetEntryFrequency(const std::vector<std::string> &tex
 }
 
 bool JudgeCorrectness(const std::map<std::string, int> &gt, const std::map<std::string, int> &pred) {
-//    std::cout << "****************** gt\n";
-//    std::for_each(gt.begin(), gt.end(),
-//                  [](const std::pair<std::string, int> &e) { std::cout << "\"" << e.first << "\": " << e.second << std::endl; });
-//    std::cout << "****************** pred\n";
-//    std::for_each(pred.begin(), pred.end(),
-//                  [](const std::pair<std::string, int> &e) { std::cout << "\"" << e.first << "\": " << e.second << std::endl; });
-    std::cout << "keyword correct_frequency actual_frequency\n";
-    for (const auto &kv: gt) {
-        std::cout << "\"" << kv.first << "\": " << kv.second;
-        auto it = pred.find(kv.first);
-        if (it != pred.end())
-            std::cout << " " << it->second;
-        std::cout << std::endl;
-    }
+//    std::cout << "keyword correct_frequency actual_frequency\n";
+//    for (const auto &kv: gt) {
+//        std::cout << "\"" << kv.first << "\": " << kv.second;
+//        auto it = pred.find(kv.first);
+//        if (it != pred.end())
+//            std::cout << " " << it->second;
+//        std::cout << std::endl;
+//    }
     return gt == pred;
 }
 
