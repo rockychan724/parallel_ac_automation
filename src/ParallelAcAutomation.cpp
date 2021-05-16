@@ -12,18 +12,17 @@ ParallelAcAutomation::ParallelAcAutomation(const std::vector<std::string> &keywo
 }
 
 
-std::vector<std::string> ParallelAcAutomation::Search(const std::string& text) {
+std::vector<std::string> ParallelAcAutomation::Search(const std::string &text) {
     std::vector<std::string> sub_texts;
     std::vector<std::string> boundary_texts;
 
     this->SplitText(text, sub_texts, boundary_texts);
 
-    this->que.clear();
     this->result.clear();
     for (int i = 0; i < p; i++) {
         this->que[i].push(sub_texts[i]);
     }
-    for (const auto & b_t: boundary_texts) {
+    for (const auto &b_t: boundary_texts) {
         this->que[p].push(b_t);
     }
 
@@ -59,7 +58,7 @@ void ParallelAcAutomation::SplitText(const std::string &text, std::vector<std::s
         else
             sub_texts.push_back(text.substr(i * sub_text_len));
         if (i > 0) {
-            boundary_texts.push_back(text.substr(std::max(0, i * sub_text_len - (m - 1)), (m - 1 * 2)));
+            boundary_texts.push_back(text.substr(std::max(0, i * sub_text_len - (m - 1)), (m - 1) * 2));
         }
     }
 }
