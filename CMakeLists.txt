@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 #aux_source_directory(${PROJECT_SOURCE_DIR}/src src_list)
 #add_executable(parallel_ac_automation main.cpp ${scr_list})
 
-add_executable(run main.cpp src/KMP.cpp src/KMP.h src/Trie.cpp src/Trie.h src/AcAutomation.cpp src/AcAutomation.h src/ParallelAcAutomation.cpp src/ParallelAcAutomation.h src/util.h src/MatchBase.cpp src/MatchBase.h)
+add_executable(run main.cpp src/KMP.h src/Trie.cpp src/Trie.h src/AcAutomation.cpp src/AcAutomation.h src/ParallelAcAutomation.cpp src/ParallelAcAutomation.h src/util.h src/MatchBase.cpp src/MatchBase.h)
 add_executable(test test/test.cpp test/TestT.cpp test/TestT.h)
 
 target_link_libraries(

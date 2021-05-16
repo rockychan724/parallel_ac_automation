@@ -5,12 +5,14 @@
 #include <map>
 #include <string>
 
-template<typename T> // T is std::string or std::wstring
+template<typename CharType> // T is generally char, wchar_t, char16_t or char32_t.
 class MatchBase {
 public:
-    virtual int Init(const std::map<std::string, std::string> &config, const std::vector<T> &keywords) = 0;
+    using MyString = std::basic_string<CharType>;
 
-    virtual std::map<T, std::vector<int>> Search(const T &text) = 0;
+    virtual int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) = 0;
+
+    virtual std::map<MyString, std::vector<int>> Search(const MyString &text) = 0;
 };
 
 #endif //PARALLEL_AC_AUTOMATION_MATCHBASE_H

@@ -1,3 +1,4 @@
+#include "src/MatchBase.h"
 #include "src/KMP.h"
 #include "src/Trie.h"
 #include "src/AcAutomation.h"
@@ -6,15 +7,16 @@
 #include "sys/time.h"
 
 void TestKMP() {
-    std::string text = "BBC ABCDAB ABCDABCDABDE";
+    std::cout << "\n\n======================= KMP =======================\n";
     std::vector<std::string> keywords = {"ABCDABD", "abab"};
-    KMP<std::string> kmp;
+    std::string text = "BBC ABCDAB ABCDABCDABDE";
+    std::shared_ptr<MatchBase<char>> kmp(new KMP<char>());
     std::map<std::string, std::string> config = {{"use_optimize", "1"}};
-    if (kmp.Init(config, keywords) == 0) {
+    if (kmp->Init(config, keywords) == 0) {
         std::cout << "Init error!!!\n";
         return;
     }
-    std::map<std::string, std::vector<int>> res = kmp.Search(text);
+    std::map<std::string, std::vector<int>> res = kmp->Search(text);
     std::cout << "text: \"" << text << "\"\n";
     std::cout << "match result: \n";
     for (const auto &kv: res) {
@@ -22,18 +24,32 @@ void TestKMP() {
         std::for_each(kv.second.begin(), kv.second.end(), [](int pos) { std::cout << pos << " "; });
         std::cout << std::endl;
     }
+    std::cout << "======================= KMP =======================\n";
 }
 
 void TestTrie() {
-    std::vector<std::string> words = {"in", "inn", "int", "tea", "ten", "to"};
-    std::vector<std::string> strings = {"you are a good man", "too young", "happy birthday to you", "te", "insert"};
-    Trie tree('\0', false);
-    for (const auto &word: words) {
-        tree.Insert(const_cast<char *>(word.c_str()), word.length());
+    std::cout << "\n\n======================= Trie =======================\n";
+    std::vector<std::string> keywords = {"in", "inn", "int", "tea", "ten", "to"};
+    std::vector<std::string> texts = {"you are a good man", "too young", "happy birthday to you", "te", "insert"};
+
+    std::shared_ptr<MatchBase<char>> trie(new Trie<char>());
+    std::map<std::string, std::string> config;
+    if (trie->Init(config, keywords) == 0) {
+        std::cout << "Init error!!!\n";
+        return;
     }
-    for (const auto &s: strings) {
-        std::cout << tree.Search(const_cast<char *>(s.c_str()), s.length()) << std::endl;
+
+    for (const auto &text: texts) {
+        std::map<std::string, std::vector<int>> res = trie->Search(text);
+        std::cout << "text: \"" << text << "\"\n";
+        std::cout << "match result: \n";
+        for (const auto &kv: res) {
+            std::cout << "\"" << kv.first << "\": ";
+            std::for_each(kv.second.begin(), kv.second.end(), [](int pos) { std::cout << pos << " "; });
+            std::cout << std::endl;
+        }
     }
+    std::cout << "======================= Trie =======================\n";
 }
 
 void TestAcAutomation() {
@@ -128,7 +144,7 @@ void TestParallelAcAutomation() {
 
 int main() {
     TestKMP();
-//    TestTrie();
+    TestTrie();
 //    TestAcAutomation();
 //    TestAcAutomationV2();
 //    TestParallelAcAutomation();
