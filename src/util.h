@@ -23,7 +23,7 @@ std::vector<std::string> GetModeString(const std::string& file) {
     }
 }
 
-std::string GetText(const std::string& file, bool ignore_spaces = true) {
+std::string GetText(const std::string& file, bool ignore_spaces = false) {
     std::ifstream ifs(file.c_str());
     if (!ifs.is_open()) {
         std::cout << "Can't open file!!!" << std::endl;

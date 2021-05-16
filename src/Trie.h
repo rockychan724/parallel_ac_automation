@@ -23,8 +23,12 @@ public:
         std::map<MyString, std::vector<int>> res;
         std::shared_ptr<Node> temp = this->root;
         for (int i = 0; i < text.length(); i++) {
-            if (temp->end_flag)
-                res.insert({temp->path, {i - (int)temp->path.length()}});
+            if (temp->end_flag) {
+                if (res.find(temp->path) == res.end())
+                    res.insert({temp->path, {i - (int)temp->path.length()}});
+                else
+                    res[temp->path].push_back(i - (int)temp->path.length());
+            }
             if (temp->next.find(text[i]) == temp->next.end())
                 temp = this->root;
             else

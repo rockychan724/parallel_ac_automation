@@ -46,7 +46,10 @@ public:
                 }
             }
             if (j == m) {
-                res.insert({pattern, {i - j}});
+                if (res.find(pattern) == res.end())
+                    res.insert({pattern, {i - j}});
+                else
+                    res[pattern].push_back(i - j);
             }
         }
         return res;
