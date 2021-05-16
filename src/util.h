@@ -52,24 +52,29 @@ std::map<std::string, int> GetEntryFrequency(const std::string &text, const std:
     return res;
 }
 
-std::map<std::string, int> GetEntryFrequency(const std::vector<std::string> &texts, const std::vector<std::string> &words) {
+template<class CharType>
+std::map<std::string, int> GetEntryFrequency(const std::map<std::basic_string<CharType>, std::vector<int>> &results, const std::vector<std::string> &words) {
     std::map<std::string, int> res;
     for (auto &word : words) {
-        int count = std::count(texts.begin(), texts.end(), word);
-        res.insert({word, count});
+        auto it = results.find(word);
+        if (it == results.end()) {
+            res.insert({word, 0});
+        } else {
+            res.insert({word, it->second.size()});
+        }
     }
     return res;
 }
 
 bool JudgeCorrectness(const std::map<std::string, int> &gt, const std::map<std::string, int> &pred) {
-//    std::cout << "keyword correct_frequency actual_frequency\n";
-//    for (const auto &kv: gt) {
-//        std::cout << "\"" << kv.first << "\": " << kv.second;
-//        auto it = pred.find(kv.first);
-//        if (it != pred.end())
-//            std::cout << " " << it->second;
-//        std::cout << std::endl;
-//    }
+    std::cout << "keyword correct_frequency actual_frequency\n";
+    for (const auto &kv: gt) {
+        std::cout << "\"" << kv.first << "\": " << kv.second;
+        auto it = pred.find(kv.first);
+        if (it != pred.end())
+            std::cout << " " << it->second;
+        std::cout << std::endl;
+    }
     return gt == pred;
 }
 

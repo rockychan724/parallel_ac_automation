@@ -3,14 +3,15 @@
 
 #include "MatchBase.h"
 #include <memory>
+#include <algorithm>
 
 template<typename CharType>
 class Trie : public MatchBase<CharType> {
 public:
     using MyString = std::basic_string<CharType>;
 
-    int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
-        this->root = std::make_shared<Node>();
+    virtual int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
+        this->root = std::make_shared<TrieNode>();
 
         for (const auto &word: keywords) {
             this->Insert(word);
@@ -19,9 +20,9 @@ public:
         return 1;
     }
 
-    std::map<MyString, std::vector<int>> Search(const MyString &text) {
+    virtual std::map<MyString, std::vector<int>> Search(const MyString &text) {
         std::map<MyString, std::vector<int>> res;
-        std::shared_ptr<Node> temp = this->root;
+        std::shared_ptr<TrieNode> temp = this->root;
         for (int i = 0; i < text.length(); i++) {
             if (temp->end_flag) {
                 if (res.find(temp->path) == res.end())
@@ -37,32 +38,33 @@ public:
         return res;
     }
 
-protected:
-    struct Node {
+private:
+    struct TrieNode {
         bool end_flag;
-        std::map<CharType, std::shared_ptr<Node>> next;
+        std::map<CharType, std::shared_ptr<TrieNode>> next;
         MyString path;
 
-        explicit Node() {
+        explicit TrieNode() {
             end_flag = false;
             next.clear();
             path = "";
         }
     };
 
-    std::shared_ptr<Node> root;
+    std::shared_ptr<TrieNode> root;
 
+    // insert a word into ac tree
     void Insert(const MyString &word) {
-        std::shared_ptr<Node> temp = this->root;
-        for (const auto &w: word) {
+        std::shared_ptr<TrieNode> temp = this->root;
+        for (const auto &w : word) {
             if (temp->next.find(w) == temp->next.end()) {
-                std::shared_ptr<Node> new_node(new Node());
+                std::shared_ptr<TrieNode> new_node(new TrieNode());
                 new_node->path = temp->path + w;
                 temp->next.insert({w, new_node});
             }
             temp = temp->next[w];
         }
-        temp->end_flag = true;
+        temp->end_flag = true; // last char's flag of a word should be set true
     }
 };
 
