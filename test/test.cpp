@@ -30,7 +30,8 @@ void TestKMP() {
         std::map<std::string, std::vector<int>> res = kmp.Search(text);
         gettimeofday(&end, nullptr);
         double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
-        std::cout << "====== text: \"" << text << "\"\n";
+        std::cout << "======\n";
+//        std::cout << "text: \"" << text << "\"\n";
         std::cout << "Run time " << cost << " ms\n";
         std::cout << "Match result: \n";
         for (const auto &kv: res) {
@@ -68,7 +69,8 @@ void TestTrie() {
         std::map<std::string, std::vector<int>> res = trie.Search(text);
         gettimeofday(&end, nullptr);
         double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
-        std::cout << "====== text: \"" << text << "\"\n";
+        std::cout << "======\n";
+//        std::cout << "text: \"" << text << "\"\n";
         std::cout << "Run time " << cost << " ms\n";
         std::cout << "Match result: \n";
         for (const auto &kv: res) {
@@ -106,7 +108,8 @@ void TestAcAutomation() {
         std::map<std::string, std::vector<int>> res = ac.Search(text);
         gettimeofday(&end, nullptr);
         double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
-        std::cout << "====== text: \"" << text << "\"\n";
+        std::cout << "======\n";
+//        std::cout << "text: \"" << text << "\"\n";
         std::cout << "Length of text: " << text.length() << std::endl;
         std::cout << "Run time " << cost << " ms\n";
         std::cout << "Match result: \n";
@@ -144,7 +147,8 @@ void TestParallelAcAutomation() {
         std::map<std::string, std::vector<int>> res = pac.Search(text);
         gettimeofday(&end, nullptr);
         double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
-        std::cout << "====== text: \"" << text << "\"\n";
+        std::cout << "======\n";
+//        std::cout << "text: \"" << text << "\"\n";
         std::cout << "Length of text: " << text.length() << std::endl;
         std::cout << "Run time " << cost << " ms\n";
         std::cout << "Match result: \n";

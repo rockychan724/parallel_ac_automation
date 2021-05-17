@@ -31,7 +31,8 @@ public:
         // Get next arrays
         for (size_t i = 0; i < this->keywords.size(); i++) {
             if (!this->case_sensitive)
-                std::transform(this->keywords[i].begin(), this->keywords[i].end(), this->keywords[i].begin(), ::tolower);
+                std::transform(this->keywords[i].begin(), this->keywords[i].end(), this->keywords[i].begin(),
+                               ::tolower);
             if (use_optimize == 0)
                 this->nexts[i] = KMP::GetNext(this->keywords[i]);
             else
@@ -47,28 +48,12 @@ public:
             std::transform(text.begin(), text.end(), text.begin(), ::tolower);
         std::map<MyString, std::vector<int>> res;
         for (size_t t = 0; t < this->keywords.size(); t++) {
-            MyString pattern = this->keywords[t];
-            std::vector<int> next = this->nexts[t];
-            int n = text.length(), m = pattern.length();
-            int i = 0, j = 0;
-            while (i < n && j < m) {
-                if (j == -1 || text[i] == pattern[j]) {
-                    i++, j++;
-                } else {
-                    j = next[j];
-                }
-            }
-            if (j == m) {
-                if (res.find(pattern) == res.end())
-                    res.insert({pattern, {i - j}});
-                else
-                    res[pattern].push_back(i - j);
-            }
+            this->SearchAll(text, this->keywords[t], this->nexts[t], res);
         }
         return res;
     }
 
-protected:
+private:
     std::vector<MyString> keywords;
     std::vector<std::vector<int>> nexts;
     bool case_sensitive;
@@ -107,6 +92,46 @@ protected:
             }
         }
         return next;
+    }
+
+    void SearchOnce(const MyString &text, const MyString &pattern, const std::vector<int> &next,
+                    std::map<MyString, std::vector<int>> &res) {
+        int n = text.length(), m = pattern.length();
+        int i = 0, j = 0;
+        while (i < n && j < m) {
+            if (j == -1 || text[i] == pattern[j]) {
+                i++, j++;
+            } else {
+                j = next[j];
+            }
+        }
+        if (j == m) {
+            if (res.find(pattern) == res.end())
+                res.insert({pattern, {i - j}});
+            else
+                res[pattern].push_back(i - j);
+        }
+    }
+
+    void SearchAll(const MyString &text, const MyString &pattern, const std::vector<int> &next,
+                   std::map<MyString, std::vector<int>> &res) {
+        int n = text.length(), m = pattern.length();
+        int i = 0, j = 0;
+        while (i < n) {
+            if (j == -1 || text[i] == pattern[j]) {
+                i++, j++;
+            } else {
+                j = next[j];
+            }
+
+            if (j == m) {
+                if (res.find(pattern) == res.end())
+                    res.insert({pattern, {i - j}});
+                else
+                    res[pattern].push_back(i - j);
+                j = 0; // 找到之后将j归零，继续找下一个
+            }
+        }
     }
 };
 
