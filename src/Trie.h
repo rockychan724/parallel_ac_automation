@@ -11,16 +11,29 @@ public:
     using MyString = std::basic_string<CharType>;
 
     int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
+        // Check config parameter
+        auto it = config.find("case_sensitive");
+        if (it == config.end()) {
+            std::cout << "Parameter \"case_sensitive\" is required in class AcAutomation!!!\n";
+            return 0;
+        }
+        this->case_sensitive = std::stoi(it->second);
+
         this->root = std::make_shared<TrieNode>();
 
-        for (const auto &word: keywords) {
+        for (auto word: keywords) {
+            if (!this->case_sensitive)
+                std::transform(word.begin(), word.end(), word.begin(), ::tolower);
             this->Insert(word);
         }
 
         return 1;
     }
 
-    std::map<MyString, std::vector<int>> Search(const MyString &text) {
+    std::map<MyString, std::vector<int>> Search(const MyString &_text) {
+        MyString text = _text;
+        if (!this->case_sensitive)
+            std::transform(text.begin(), text.end(), text.begin(), ::tolower);
         std::map<MyString, std::vector<int>> res;
         std::shared_ptr<TrieNode> temp = this->root;
         for (int i = 0; i < text.length(); i++) {
@@ -60,6 +73,7 @@ private:
     };
 
     std::shared_ptr<TrieNode> root;
+    bool case_sensitive;
 
     // insert a word into ac tree
     void Insert(const MyString &word) {

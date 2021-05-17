@@ -3,6 +3,7 @@
 
 #include "MatchBase.h"
 #include <iostream>
+#include <algorithm>
 
 template<typename CharType>
 class KMP : public MatchBase<CharType> {
@@ -17,21 +18,33 @@ public:
             return 0;
         }
         int use_optimize = std::stoi(it->second);
+        // Check config parameter
+        it = config.find("case_sensitive");
+        if (it == config.end()) {
+            std::cout << "Parameter \"case_sensitive\" is required in class AcAutomation!!!\n";
+            return 0;
+        }
+        this->case_sensitive = std::stoi(it->second);
 
-        // Get next arrays
         this->keywords = _keywords;
-        this->nexts.resize(_keywords.size());
-        for (size_t i = 0; i < _keywords.size(); i++) {
+        this->nexts.resize(this->keywords.size());
+        // Get next arrays
+        for (size_t i = 0; i < this->keywords.size(); i++) {
+            if (!this->case_sensitive)
+                std::transform(this->keywords[i].begin(), this->keywords[i].end(), this->keywords[i].begin(), ::tolower);
             if (use_optimize == 0)
-                this->nexts[i] = KMP::GetNext(_keywords[i]);
+                this->nexts[i] = KMP::GetNext(this->keywords[i]);
             else
-                this->nexts[i] = KMP::GetNextOptimized(_keywords[i]);
+                this->nexts[i] = KMP::GetNextOptimized(this->keywords[i]);
         }
 
         return 1;
     }
 
-    std::map<MyString, std::vector<int>> Search(const MyString &text) {
+    std::map<MyString, std::vector<int>> Search(const MyString &_text) {
+        MyString text = _text;
+        if (!this->case_sensitive)
+            std::transform(text.begin(), text.end(), text.begin(), ::tolower);
         std::map<MyString, std::vector<int>> res;
         for (size_t t = 0; t < this->keywords.size(); t++) {
             MyString pattern = this->keywords[t];
@@ -58,6 +71,7 @@ public:
 protected:
     std::vector<MyString> keywords;
     std::vector<std::vector<int>> nexts;
+    bool case_sensitive;
 
     static std::vector<int> GetNext(const MyString &pattern) {
         std::vector<int> next(pattern.length());

@@ -4,6 +4,7 @@
 #include "MatchBase.h"
 #include <iostream>
 #include <queue>
+#include <algorithm>
 
 template<typename CharType>
 class AcAutomation : public MatchBase<CharType> {
@@ -20,7 +21,7 @@ public:
 
 
 protected:
-    int AcInit(const std::map<std::string, std::string> &config, std::vector<MyString> keywords) {
+    int AcInit(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
         // Check config parameter
         auto it = config.find("case_sensitive");
         if (it == config.end()) {
@@ -32,7 +33,7 @@ protected:
         this->root = std::make_shared<AcNode>();
 
         // Insert keywords
-        for (auto &word: keywords) {
+        for (auto word: keywords) {
             if (!this->case_sensitive)
                 std::transform(word.begin(), word.end(), word.begin(), ::tolower);
             this->Insert(word);
@@ -43,7 +44,8 @@ protected:
         return 1;
     }
 
-    std::map<MyString, std::vector<int>> AcSearch(MyString text, int offset = 0) {
+    std::map<MyString, std::vector<int>> AcSearch(const MyString &_text, int offset = 0) {
+        MyString text = _text;
         if (!this->case_sensitive)
             std::transform(text.begin(), text.end(), text.begin(), ::tolower);
 
