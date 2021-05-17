@@ -104,12 +104,11 @@ bool JudgeCorrectness(const std::map<std::string, std::vector<int>> &gt, const s
     std::cout << "****** Compare result with GT ******\n";
     for (const auto &kv: gt) {
         auto it = pred.find(kv.first);
-        if (kv.second.empty() && it == pred.end())
-            continue;
         std::cout << "\"" << kv.first << "\": gt: {";
         std::for_each(kv.second.begin(), kv.second.end(), [](int pos){std::cout << pos << ",";});
         std::cout << "} actual value: {";
-        std::for_each(it->second.begin(), it->second.end(), [](int pos){std::cout << pos << ",";});
+        if (it != pred.end())
+            std::for_each(it->second.begin(), it->second.end(), [](int pos){std::cout << pos << ",";});
         std::cout << "}";
         std::cout << " is right? " << (kv.second == it->second) << std::endl;
     }

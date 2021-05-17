@@ -24,16 +24,24 @@ public:
         std::map<MyString, std::vector<int>> res;
         std::shared_ptr<TrieNode> temp = this->root;
         for (int i = 0; i < text.length(); i++) {
+            if (temp->next.find(text[i]) != temp->next.end()) // 若当前节点的子节点能匹配text[i]，则更新当前节点为其子节点
+                temp = temp->next[text[i]];
+            else if (temp != this->root) { // 若当前节点的子节点不能匹配text[i] 且 当前节点不是根节点，则从头开始匹配，因此更新当前节点为 根节点 或 根节点的子节点
+                // 更新的时候注意：当前节点前面的所有节点（即从根节点到当前节点的所有节点，不包括根节点和当前节点）都是匹配过的。因此，更新的时候考虑要回退，
+                // 前面匹配过的部分需要重新匹配。具体做法是从匹配过的串中的第二位字符开始重新从节点匹配。
+                i = i - (temp->path.length() - 1);
+                if (this->root->next.find(text[i]) != this->root->next.end())
+                    temp = this->root->next[text[i]];
+                else // Search from root node
+                    temp = this->root;
+            }
+
             if (temp->end_flag) {
                 if (res.find(temp->path) == res.end())
-                    res.insert({temp->path, {i - (int) temp->path.length()}});
+                    res.insert({temp->path, {i - ((int) temp->path.length() - 1)}});
                 else
-                    res[temp->path].push_back(i - (int) temp->path.length());
+                    res[temp->path].push_back(i - ((int) temp->path.length() - 1));
             }
-            if (temp->next.find(text[i]) == temp->next.end())
-                temp = this->root;
-            else
-                temp = temp->next[text[i]];
         }
         return res;
     }
@@ -47,7 +55,7 @@ private:
         explicit TrieNode() {
             end_flag = false;
             next.clear();
-            path = "";
+            path = "";  // TODO: to be removed
         }
     };
 

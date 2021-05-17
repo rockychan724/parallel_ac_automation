@@ -24,13 +24,16 @@ void TestKMP() {
         std::for_each(kv.second.begin(), kv.second.end(), [](int pos) { std::cout << pos << " "; });
         std::cout << std::endl;
     }
+    std::map<std::string, std::vector<int>> gt = GetGT(text, keywords, false);
+    bool is_right = JudgeCorrectness(gt, res);
+    std::cout << "Is right? " << is_right << std::endl;
     std::cout << "======================= KMP =======================\n";
 }
 
 void TestTrie() {
     std::cout << "\n\n======================= Trie =======================\n";
-    std::vector<std::string> keywords = {"in", "inn", "int", "tea", "ten", "to", "you", "ins"};
-    std::vector<std::string> texts = {"you are a good man", "too young", "happy birthday to you", "te", "insert"};
+    std::vector<std::string> keywords = {"in", "inn", "int", "tea", "ten", "to", "you", "ins", "template", "plata"};
+    std::vector<std::string> texts = {"abc templata", "you are a good man", "too young", "happy biyouday to you", "te", "insert"};
 
     Trie<char> trie;
     std::map<std::string, std::string> config;
@@ -41,13 +44,16 @@ void TestTrie() {
 
     for (const auto &text: texts) {
         std::map<std::string, std::vector<int>> res = trie.Search(text);
-        std::cout << "text: \"" << text << "\"\n";
+        std::cout << "====== text: \"" << text << "\"\n";
         std::cout << "match result: \n";
         for (const auto &kv: res) {
             std::cout << "\"" << kv.first << "\": ";
             std::for_each(kv.second.begin(), kv.second.end(), [](int pos) { std::cout << pos << " "; });
             std::cout << std::endl;
         }
+        std::map<std::string, std::vector<int>> gt = GetGT(text, keywords, false);
+        bool is_right = JudgeCorrectness(gt, res);
+        std::cout << "Is right? " << is_right << std::endl;
     }
     std::cout << "======================= Trie =======================\n";
 }
@@ -67,7 +73,7 @@ void TestAcAutomation() {
 
     for (const auto &text: texts) {
         std::map<std::string, std::vector<int>> res = ac_tree.Search(text);
-        std::cout << "text: \"" << text << "\"\n";
+        std::cout << "====== text: \"" << text << "\"\n";
         std::cout << "match result: \n";
         for (const auto &kv: res) {
             std::cout << "\"" << kv.first << "\": ";
@@ -151,10 +157,10 @@ void TestParallelAcAutomation() {
 }
 
 int main(){
-//    TestKMP();
-//    TestTrie();
+    TestKMP();
+    TestTrie();
 //    TestAcAutomation();
-    TestAcAutomationV2();
-    TestParallelAcAutomation();
+//    TestAcAutomationV2();
+//    TestParallelAcAutomation();
     return 0;
 }
