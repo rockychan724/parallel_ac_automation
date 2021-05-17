@@ -10,7 +10,7 @@ class Trie : public MatchBase<CharType> {
 public:
     using MyString = std::basic_string<CharType>;
 
-    virtual int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
+    int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
         this->root = std::make_shared<TrieNode>();
 
         for (const auto &word: keywords) {
@@ -20,7 +20,7 @@ public:
         return 1;
     }
 
-    virtual std::map<MyString, std::vector<int>> Search(const MyString &text) {
+    std::map<MyString, std::vector<int>> Search(const MyString &text) {
         std::map<MyString, std::vector<int>> res;
         std::shared_ptr<TrieNode> temp = this->root;
         for (int i = 0; i < text.length(); i++) {

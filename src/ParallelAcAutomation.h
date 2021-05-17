@@ -39,7 +39,8 @@ public:
 
         this->SplitText(text, sub_texts, boundary_texts);
 
-        this->result.clear();
+
+        // Push data into queue
         for (int i = 0; i < p; i++) {
             this->que[i].push(sub_texts[i]);
         }
@@ -47,15 +48,18 @@ public:
             this->que[p].push(b_t);
         }
 
+        this->result.clear();
+        // Launch all threads
         for (int i = 0; i < p + 1; i++) {
             this->threads.emplace_back([this](int thread_id) { this->Run(thread_id); }, i);
         }
 
+        // Wait for all threads to end
         for (int i = 0; i < p + 1; i++) {
             this->threads[i].join();
         }
 
-        // sort result
+        // Sort every keyword's all positions in this->result.
         for (auto &kv: this->result) {
             std::sort(kv.second.begin(), kv.second.end());
         }

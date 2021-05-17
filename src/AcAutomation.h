@@ -1,12 +1,12 @@
 #ifndef PARALLEL_AC_AUTOMATION_ACAUTOMATION_H
 #define PARALLEL_AC_AUTOMATION_ACAUTOMATION_H
 
-#include "Trie.h"
+#include "MatchBase.h"
 #include <iostream>
 #include <queue>
 
 template<typename CharType>
-class AcAutomation: public Trie<CharType> {
+class AcAutomation: public MatchBase<CharType> {
 public:
     using MyString = std::basic_string<CharType>;
 
@@ -20,7 +20,7 @@ public:
 
 
 protected:
-    int AcInit(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
+    int AcInit(const std::map<std::string, std::string> &config, std::vector<MyString> keywords) {
         // Check config parameter
         auto it = config.find("case_sensitive");
         if (it == config.end()) {
@@ -32,7 +32,7 @@ protected:
         this->root = std::make_shared<AcNode>();
 
         // Insert keywords
-        for (auto word: keywords) {
+        for (auto &word: keywords) {
             if (!this->case_sensitive)
                 std::transform(word.begin(), word.end(), word.begin(), ::tolower);
             this->Insert(word);
@@ -43,8 +43,7 @@ protected:
         return 1;
     }
 
-    std::map<MyString, std::vector<int>> AcSearch(const MyString &_text) {
-        MyString text = _text;
+    std::map<MyString, std::vector<int>> AcSearch(MyString text) {
         if (!this->case_sensitive)
             std::transform(text.begin(), text.end(), text.begin(), ::tolower);
 
@@ -64,9 +63,9 @@ protected:
             while (temp != this->root) {
                 if (temp->end_flag) {
                     if (res.find(temp->path) == res.end())
-                        res.insert({temp->path, {i - (int)temp->path.length()}});
+                        res.insert({temp->path, {i - ((int)temp->path.length() - 1)}});
                     else
-                        res[temp->path].push_back(i - (int)temp->path.length());
+                        res[temp->path].push_back(i - ((int)temp->path.length() - 1));
                 }
                 temp = temp->fail;
             }
