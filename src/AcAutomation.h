@@ -6,7 +6,7 @@
 #include <queue>
 
 template<typename CharType>
-class AcAutomation: public MatchBase<CharType> {
+class AcAutomation : public MatchBase<CharType> {
 public:
     using MyString = std::basic_string<CharType>;
 
@@ -43,7 +43,7 @@ protected:
         return 1;
     }
 
-    std::map<MyString, std::vector<int>> AcSearch(MyString text) {
+    std::map<MyString, std::vector<int>> AcSearch(MyString text, int offset = 0) {
         if (!this->case_sensitive)
             std::transform(text.begin(), text.end(), text.begin(), ::tolower);
 
@@ -63,9 +63,9 @@ protected:
             while (temp != this->root) {
                 if (temp->end_flag) {
                     if (res.find(temp->path) == res.end())
-                        res.insert({temp->path, {i - ((int)temp->path.length() - 1)}});
+                        res.insert({temp->path, {i - ((int) temp->path.length() - 1) + offset}});
                     else
-                        res[temp->path].push_back(i - ((int)temp->path.length() - 1));
+                        res[temp->path].push_back(i - ((int) temp->path.length() - 1) + offset);
                 }
                 temp = temp->fail;
             }
@@ -87,6 +87,7 @@ private:
             path = "";
         }
     };
+
     std::shared_ptr<AcNode> root;
     bool case_sensitive;
 

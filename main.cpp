@@ -19,7 +19,7 @@ void TestBase(const std::map<std::string, std::string> &config, const std::vecto
     gettimeofday(&start, nullptr);
     // Search
     std::map<std::string, std::vector<int>> res = matcher->Search(text);
-    gettimeofday(&start, nullptr);
+    gettimeofday(&end, nullptr);
     double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
 
     // Output

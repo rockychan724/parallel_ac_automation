@@ -4,6 +4,7 @@
 #include "AcAutomation.h"
 #include <thread>
 #include <mutex>
+#include <tuple>
 
 std::mutex mut;
 
@@ -34,8 +35,8 @@ public:
     }
 
     std::map<MyString, std::vector<int>> Search(const MyString &text) {
-        std::vector<std::string> sub_texts;
-        std::vector<std::string> boundary_texts;
+        std::vector<std::tuple<std::string, int>> sub_texts;
+        std::vector<std::tuple<std::string, int>> boundary_texts;
 
         this->SplitText(text, sub_texts, boundary_texts);
 
@@ -69,30 +70,34 @@ public:
 
 private:
     std::vector<std::thread> threads;
-    std::vector<std::queue<std::string>> que; // storage of public resources
+    std::vector<std::queue<std::tuple<std::string, int>>> que; // Each queue stores segments of the text and its offset position.
     std::map<MyString, std::vector<int>> result;
     int m; // length of longest keyword
     int p; // segments num of text
 
-    void SplitText(const std::string &text, std::vector<std::string> &sub_texts, std::vector<std::string> &boundary_texts) {
+    void SplitText(const std::string &text, std::vector<std::tuple<std::string, int>> &sub_texts,
+                   std::vector<std::tuple<std::string, int>> &boundary_texts) {
         int total_len = text.length();
         int sub_text_len = total_len / this->p;
         for (int i = 0; i < this->p; i++) {
-            if (i < this->p - 1)
-                sub_texts.push_back(text.substr(i * sub_text_len, sub_text_len));
+            if (i < (this->p - 1))
+                sub_texts.push_back({text.substr(i * sub_text_len, sub_text_len), i * sub_text_len});
             else
-                sub_texts.push_back(text.substr(i * sub_text_len));
+                sub_texts.push_back({text.substr(i * sub_text_len), i * sub_text_len});
             if (i > 0) {
-                boundary_texts.push_back(text.substr(std::max(0, i * sub_text_len - (this->m - 1)), (this->m - 1) * 2));
+                int start_position = std::max(0, i * sub_text_len - (this->m - 1));
+                boundary_texts.push_back({text.substr(start_position, (this->m - 1) * 2), start_position});
             }
         }
     }
 
     void Run(int thread_id) {
         if (!this->que[thread_id].empty()) {
-            std::string sub_text = this->que[thread_id].front();
+            std::string sub_text;
+            int offset;
+            std::tie(sub_text, offset) = this->que[thread_id].front();
             this->que[thread_id].pop();
-            std::map<MyString, std::vector<int>> sub_result = this->AcSearch(sub_text);
+            std::map<MyString, std::vector<int>> sub_result = this->AcSearch(sub_text, offset);
             mut.lock();
             // merge sub_result to this->result;
             this->MergeResult(sub_result);
@@ -107,7 +112,8 @@ private:
                 this->result.insert(kv);
             } else {
                 std::vector<int> dst;
-                std::merge(this->result[kv.first].begin(), this->result[kv.first].end(), kv.second.begin(), kv.second.end(), std::back_inserter(dst));
+                std::merge(this->result[kv.first].begin(), this->result[kv.first].end(), kv.second.begin(), kv.second.end(),
+                           std::back_inserter(dst));
                 this->result[kv.first] = dst;
             }
         }

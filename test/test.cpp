@@ -99,7 +99,7 @@ void TestAcAutomationV2() {
     struct timeval start{}, end{};
     gettimeofday(&start, nullptr);
     auto res = ac.Search(text);
-    gettimeofday(&start, nullptr);
+    gettimeofday(&end, nullptr);
     double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
     std::cout << "Run time " << cost << " ms\n";
     std::cout << "Match result: \n";
@@ -125,7 +125,7 @@ void TestParallelAcAutomation() {
 
     ParallelAcAutomation<char> pac;
     std::map<std::string, std::string> config = {{"case_sensitive", "0"},
-                                                 {"p",              "2"}}; // p: segments of text
+                                                 {"p",              "7"}}; // p: segments of text
     if (pac.Init(config, keywords) == 0) {
         std::cout << "Init error!!!\n";
         return;
@@ -134,7 +134,7 @@ void TestParallelAcAutomation() {
     struct timeval start{}, end{};
     gettimeofday(&start, nullptr);
     auto res = pac.Search(text);
-    gettimeofday(&start, nullptr);
+    gettimeofday(&end, nullptr);
     double cost = (end.tv_sec * 1000.0 + end.tv_usec / 1000.0) - (start.tv_sec * 1000.0 + start.tv_usec / 1000.0);
     std::cout << "Run time " << cost << " ms\n";
     std::cout << "Match result: \n";
@@ -154,7 +154,7 @@ int main(){
 //    TestKMP();
 //    TestTrie();
 //    TestAcAutomation();
-//    TestAcAutomationV2();
+    TestAcAutomationV2();
     TestParallelAcAutomation();
     return 0;
 }

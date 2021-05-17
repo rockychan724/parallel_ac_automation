@@ -110,7 +110,8 @@ bool JudgeCorrectness(const std::map<std::string, std::vector<int>> &gt, const s
         std::for_each(kv.second.begin(), kv.second.end(), [](int pos){std::cout << pos << ",";});
         std::cout << "} actual value: {";
         std::for_each(it->second.begin(), it->second.end(), [](int pos){std::cout << pos << ",";});
-        std::cout << "}\n";
+        std::cout << "}";
+        std::cout << " is right? " << (kv.second == it->second) << std::endl;
     }
     std::cout << "****** Compare result with GT ******\n";
     return gt == pred;

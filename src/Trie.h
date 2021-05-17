@@ -26,9 +26,9 @@ public:
         for (int i = 0; i < text.length(); i++) {
             if (temp->end_flag) {
                 if (res.find(temp->path) == res.end())
-                    res.insert({temp->path, {i - (int)temp->path.length()}});
+                    res.insert({temp->path, {i - (int) temp->path.length()}});
                 else
-                    res[temp->path].push_back(i - (int)temp->path.length());
+                    res[temp->path].push_back(i - (int) temp->path.length());
             }
             if (temp->next.find(text[i]) == temp->next.end())
                 temp = this->root;
