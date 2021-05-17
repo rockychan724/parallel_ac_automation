@@ -17,7 +17,7 @@ void TestKMP() {
     std::cout << std::endl;
 
     KMP<char> kmp;
-    std::map<std::string, std::string> config = {{"case_sensitive", "0"},
+    std::map<std::string, std::string> config = {{"case_sensitive", "1"},
                                                  {"use_optimize",   "1"}};
     if (kmp.Init(config, keywords) == 0) {
         std::cout << "Init error!!!\n";
@@ -57,7 +57,7 @@ void TestTrie() {
     std::cout << std::endl;
 
     Trie<char> trie;
-    std::map<std::string, std::string> config = {{"case_sensitive", "0"}};
+    std::map<std::string, std::string> config = {{"case_sensitive", "1"}};
     if (trie.Init(config, keywords) == 0) {
         std::cout << "Init error!!!\n";
         return;
@@ -96,7 +96,7 @@ void TestAcAutomation() {
     std::cout << std::endl;
 
     AcAutomation<char> ac;
-    std::map<std::string, std::string> config = {{"case_sensitive", "0"}};
+    std::map<std::string, std::string> config = {{"case_sensitive", "1"}};
     if (ac.Init(config, keywords) == 0) {
         std::cout << "Init error!!!\n";
         return;
@@ -134,7 +134,7 @@ void TestParallelAcAutomation() {
     std::cout << std::endl;
 
     ParallelAcAutomation<char> pac;
-    std::map<std::string, std::string> config = {{"case_sensitive", "0"},
+    std::map<std::string, std::string> config = {{"case_sensitive", "1"},
                                                  {"p",              "7"}}; // p: segments of text
     if (pac.Init(config, keywords) == 0) {
         std::cout << "Init error!!!\n";

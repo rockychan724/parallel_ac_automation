@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <fstream>
 
+//#define DEBUG_COMPARE_GT_AND_PRED
+
 std::vector<std::string> GetModeString(const std::string& file) {
     std::ifstream ifs(file.c_str());
     if (!ifs.is_open()) {
@@ -101,6 +103,7 @@ bool JudgeCorrectness(const std::map<std::string, int> &gt, const std::map<std::
 }
 
 bool JudgeCorrectness(const std::map<std::string, std::vector<int>> &gt, const std::map<std::string, std::vector<int>> &pred) {
+#ifdef DEBUG_COMPARE_GT_AND_PRED
     std::cout << "****** Compare result with GT ******\n";
     for (const auto &kv: gt) {
         auto it = pred.find(kv.first);
@@ -113,6 +116,7 @@ bool JudgeCorrectness(const std::map<std::string, std::vector<int>> &gt, const s
         std::cout << " is right? " << (kv.second == it->second) << std::endl;
     }
     std::cout << "****** Compare result with GT ******\n";
+#endif
     return gt == pred;
 }
 
