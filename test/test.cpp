@@ -166,8 +166,8 @@ void TestParallelAcAutomation() {
 
 int main() {
     TestKMP();
-//    TestTrie();
-//    TestAcAutomation();
-//    TestParallelAcAutomation();
+    TestTrie();
+    TestAcAutomation();
+    TestParallelAcAutomation();
     return 0;
 }

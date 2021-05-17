@@ -4,7 +4,6 @@
 #include "AcAutomation.h"
 #include <thread>
 #include <mutex>
-#include <tuple>
 
 std::mutex mut;
 
@@ -14,17 +13,8 @@ public:
     using MyString = std::basic_string<CharType>;
 
     int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
-        // Check config parameter
-        auto it = config.find("p");
-        if (it == config.end()) {
-            std::cout << "Parameter \"p\" is required in class ParallelAcAutomation!!!\n";
+        if (this->_CheckConfig(config) == 0)
             return 0;
-        }
-        this->p = std::stoi(it->second);
-        if (this->p < 1) {
-            std::cout << "Parameter \"p\" should be greater than 0 in class ParallelAcAutomation!!!\n";
-            return 0;
-        }
 
         this->que.resize(p + 1);
         auto longest_word = std::max_element(keywords.begin(), keywords.end(),
@@ -74,6 +64,21 @@ private:
     std::map<MyString, std::vector<int>> result;
     int m; // length of longest keyword
     int p; // segments num of text
+
+    int _CheckConfig(const std::map<std::string, std::string> &config) {
+        // Check config parameter
+        auto it = config.find("p");
+        if (it == config.end()) {
+            std::cout << "Parameter \"p\" is required in class ParallelAcAutomation!!!\n";
+            return 0;
+        }
+        this->p = std::stoi(it->second);
+        if (this->p < 1) {
+            std::cout << "Parameter \"p\" should be greater than 0 in class ParallelAcAutomation!!!\n";
+            return 0;
+        }
+        return 1;
+    }
 
     void SplitText(const std::string &text, std::vector<std::tuple<std::string, int>> &sub_texts,
                    std::vector<std::tuple<std::string, int>> &boundary_texts) {

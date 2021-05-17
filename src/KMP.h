@@ -2,7 +2,6 @@
 #define PARALLEL_AC_AUTOMATION_KMP_H
 
 #include "MatchBase.h"
-#include <iostream>
 #include <algorithm>
 
 template<typename CharType>
@@ -11,20 +10,8 @@ public:
     using MyString = std::basic_string<CharType>;
 
     int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &_keywords) {
-        // Check config parameter
-        auto it = config.find("use_optimize");
-        if (it == config.end()) {
-            std::cout << "Parameter \"use_optimize\" is required in class KMP!!!\n";
+        if (this->CheckConfig(config) == 0)
             return 0;
-        }
-        int use_optimize = std::stoi(it->second);
-        // Check config parameter
-        it = config.find("case_sensitive");
-        if (it == config.end()) {
-            std::cout << "Parameter \"case_sensitive\" is required in class AcAutomation!!!\n";
-            return 0;
-        }
-        this->case_sensitive = std::stoi(it->second);
 
         this->keywords = _keywords;
         this->nexts.resize(this->keywords.size());
@@ -33,7 +20,7 @@ public:
             if (!this->case_sensitive)
                 std::transform(this->keywords[i].begin(), this->keywords[i].end(), this->keywords[i].begin(),
                                ::tolower);
-            if (use_optimize == 0)
+            if (this->use_optimize == 0)
                 this->nexts[i] = KMP::GetNext(this->keywords[i]);
             else
                 this->nexts[i] = KMP::GetNextOptimized(this->keywords[i]);
@@ -53,10 +40,30 @@ public:
         return res;
     }
 
+protected:
+    int CheckConfig(const std::map<std::string, std::string> &config) {
+        // Check config parameter
+        auto it = config.find("case_sensitive");
+        if (it == config.end()) {
+            std::cout << "Parameter \"case_sensitive\" is required in class KMP!!!\n";
+            return 0;
+        }
+        this->case_sensitive = std::stoi(it->second);
+
+        it = config.find("use_optimize");
+        if (it == config.end()) {
+            std::cout << "Parameter \"use_optimize\" is required in class KMP!!!\n";
+            return 0;
+        }
+        this->use_optimize = std::stoi(it->second);
+        return 1;
+    }
+
 private:
     std::vector<MyString> keywords;
     std::vector<std::vector<int>> nexts;
     bool case_sensitive;
+    bool use_optimize;
 
     static std::vector<int> GetNext(const MyString &pattern) {
         std::vector<int> next(pattern.length());

@@ -2,7 +2,6 @@
 #define PARALLEL_AC_AUTOMATION_ACAUTOMATION_H
 
 #include "MatchBase.h"
-#include <iostream>
 #include <queue>
 #include <algorithm>
 
@@ -21,7 +20,7 @@ public:
 
 
 protected:
-    int AcInit(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
+    int CheckConfig(const std::map<std::string, std::string> &config) {
         // Check config parameter
         auto it = config.find("case_sensitive");
         if (it == config.end()) {
@@ -29,9 +28,14 @@ protected:
             return 0;
         }
         this->case_sensitive = std::stoi(it->second);
+        return 1;
+    }
+
+    int AcInit(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
+        if (this->CheckConfig(config) == 0)
+            return 0;
 
         this->root = std::make_shared<AcNode>();
-
         // Insert keywords
         for (auto word: keywords) {
             if (!this->case_sensitive)

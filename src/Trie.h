@@ -11,16 +11,10 @@ public:
     using MyString = std::basic_string<CharType>;
 
     int Init(const std::map<std::string, std::string> &config, const std::vector<MyString> &keywords) {
-        // Check config parameter
-        auto it = config.find("case_sensitive");
-        if (it == config.end()) {
-            std::cout << "Parameter \"case_sensitive\" is required in class AcAutomation!!!\n";
+        if (this->CheckConfig(config) == 0)
             return 0;
-        }
-        this->case_sensitive = std::stoi(it->second);
 
         this->root = std::make_shared<TrieNode>();
-
         for (auto word: keywords) {
             if (!this->case_sensitive)
                 std::transform(word.begin(), word.end(), word.begin(), ::tolower);
@@ -57,6 +51,18 @@ public:
             }
         }
         return res;
+    }
+
+protected:
+    int CheckConfig(const std::map<std::string, std::string> &config) {
+        // Check config parameter
+        auto it = config.find("case_sensitive");
+        if (it == config.end()) {
+            std::cout << "Parameter \"case_sensitive\" is required in class Trie!!!\n";
+            return 0;
+        }
+        this->case_sensitive = std::stoi(it->second);
+        return 1;
     }
 
 private:
