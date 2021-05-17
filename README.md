@@ -4,9 +4,9 @@
 1. 实现了常用的经典的字符串匹配算法：KMP算法、字典树、AC自动机
 1. 实现了一种并行的AC自动机（参考：熊仁都，杨嘉佳，朱广宇，等. PARA-AC: 一种基于AC自动机的高性能匹配算法\[J]. 电子技术应用，2020，46(11):87-90，95.）
 
-## 运行
-1. 运行环境：linux 
-2. c++11
+## 使用
+1. 运行环境：Linux or Windows 
+2. gcc g++ >= 4.8.5, support c++11
 ### 1. 下载项目
 ```shell script
 git clone https://github.com/ruyueshi/parallel_ac_automation.git  # 国外地址
@@ -27,5 +27,3 @@ make
 ```shell script
 ./run
 ```
-
-## 评测
