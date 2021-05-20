@@ -10,7 +10,7 @@
 
 //#define DEBUG_COMPARE_GT_AND_PRED
 
-std::vector<std::string> GetModeString(const std::string& file) {
+std::vector<std::string> GetModeString(const std::string &file) {
     std::ifstream ifs(file.c_str());
     if (!ifs.is_open()) {
         std::cout << "Can't open file!!!" << std::endl;
@@ -25,7 +25,7 @@ std::vector<std::string> GetModeString(const std::string& file) {
     }
 }
 
-std::string GetText(const std::string& file, bool ignore_spaces = false) {
+std::string GetText(const std::string &file, bool ignore_spaces = false) {
     std::ifstream ifs(file.c_str());
     if (!ifs.is_open()) {
         std::cout << "Can't open file!!!" << std::endl;
@@ -55,7 +55,8 @@ std::map<std::string, int> GetEntryFrequencyFromString(const std::string &text, 
 }
 
 template<class CharType>
-std::map<std::string, int> GetEntryFrequencyFromResult(const std::map<std::basic_string<CharType>, std::vector<int>> &results, const std::vector<std::string> &words) {
+std::map<std::string, int>
+GetEntryFrequencyFromResult(const std::map<std::basic_string<CharType>, std::vector<int>> &results, const std::vector<std::string> &words) {
     std::map<std::string, int> res;
     for (auto &word : words) {
         auto it = results.find(word);

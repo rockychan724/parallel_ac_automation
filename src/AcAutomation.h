@@ -90,12 +90,11 @@ private:
             end_flag = false;
             next.clear();
             fail = nullptr;
-            path = "";
         }
     };
 
     std::shared_ptr<AcNode> root;
-    bool case_sensitive;
+    bool case_sensitive{};
 
     // insert a word into ac tree
     void Insert(const MyString &word) {

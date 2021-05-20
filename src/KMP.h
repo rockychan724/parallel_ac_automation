@@ -62,8 +62,8 @@ protected:
 private:
     std::vector<MyString> keywords;
     std::vector<std::vector<int>> nexts;
-    bool case_sensitive;
-    bool use_optimize;
+    bool case_sensitive{};
+    bool use_optimize{};
 
     static std::vector<int> GetNext(const MyString &pattern) {
         std::vector<int> next(pattern.length());

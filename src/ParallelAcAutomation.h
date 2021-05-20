@@ -62,8 +62,8 @@ private:
     std::vector<std::thread> threads;
     std::vector<std::queue<std::tuple<std::string, int>>> que; // Each queue stores segments of the text and its offset position.
     std::map<MyString, std::vector<int>> result;
-    int m; // length of longest keyword
-    int p; // segments num of text
+    int m{}; // length of longest keyword
+    int p{}; // segments num of text
 
     int _CheckConfig(const std::map<std::string, std::string> &config) {
         // Check config parameter

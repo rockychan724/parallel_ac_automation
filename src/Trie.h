@@ -74,12 +74,11 @@ private:
         explicit TrieNode() {
             end_flag = false;
             next.clear();
-            path = "";  // TODO: to be removed
         }
     };
 
     std::shared_ptr<TrieNode> root;
-    bool case_sensitive;
+    bool case_sensitive{};
 
     // insert a word into ac tree
     void Insert(const MyString &word) {
